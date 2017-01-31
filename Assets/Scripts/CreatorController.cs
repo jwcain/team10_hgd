@@ -8,6 +8,7 @@ public class CreatorController : MonoBehaviour {
 	public int money;
 	// Used to get reference to see who is the current player
 	private GameController game;
+	private GameDebugController gameDebug;
 	private int currObj;
 	private Transform currObjRenderer;
 	private Transform snappedEdge;
@@ -28,10 +29,14 @@ public class CreatorController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		game = GameObject.Find ("Game").GetComponent<GameController> ();
+		if (GameObject.Find ("Game")) {
+			game = GameObject.Find ("Game").GetComponent<GameController> ();
+		} else {
+			gameDebug = GameObject.Find ("GameDebug").GetComponent<GameDebugController> ();
+		}
 		// print (game.player);
 		currObj = 0;
-		contToUse = 2;
+		contToUse = 1;
 		currObjRenderer = transform.Find ("currentObj");
 		setObjRenderer ();
 	}
@@ -90,6 +95,10 @@ public class CreatorController : MonoBehaviour {
 			
 		//Check if you can place this object right now
 		canPlace = (thisObj.canPlaceInAir || snappedEdge != null);
+		//Check if this object is being placed on another
+		if(currObjRenderer.GetComponent<Collider2D>().IsTouchingLayers(LayerMask.GetMask("Creator", "Enemies"))) {
+			canPlace = false;
+		}
 		//Check if a laser hits something
 		if (thisObj.name.Equals ("Laser") && !LaserHead.checkLaser (currObjRenderer.transform.position, 
 			currObjRenderer.transform.rotation))
@@ -171,7 +180,11 @@ public class CreatorController : MonoBehaviour {
 			if (spawned.GetComponent<SentryController> ())
 				spawned.GetComponent<SentryController> ().enabled = false;
 
-			game.applyGameObject (spawned);
+			if (game) {
+				game.applyGameObject (spawned);
+			} else {
+				gameDebug.applyGameObject (spawned);
+			}
 
 			source.PlayOneShot (spawnObjectSound, 1f);
 		}
@@ -185,6 +198,10 @@ public class CreatorController : MonoBehaviour {
 		temp.a = 0.7f;
 		currObjRenderer.GetComponent<SpriteRenderer> ().color = temp;
 		currObjRenderer.localScale = availableObjs [currObj].transform.localScale;
+		//Set the collider to math the sprite's bounds
+		BoxCollider2D col = currObjRenderer.GetComponent<BoxCollider2D>();
+		col.size = currSelectedSprite.sprite.bounds.size;
+		col.offset = currSelectedSprite.sprite.bounds.center;
 		// print (currObj);
 		ui.updateObjectPreview (currObj);
 	}
