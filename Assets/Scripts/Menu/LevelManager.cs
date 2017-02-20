@@ -9,14 +9,16 @@ public class LevelManager : MonoBehaviour {
 		//print ("Menu");
 		Time.timeScale = 1;
 	}
-	public void LoadScene(string name){
+
+	public void LoadScene(string name) {
 		SceneManager.LoadScene(name);
 	}
-	public void QuitGame(){
-		Application.Quit ();
 
+	public void QuitGame() {
+		Application.Quit();
 	}
-	public void OptionsMenu(bool clicked){
+
+	public void OptionsMenu(bool clicked) {
 		if (clicked == true) {
 			optionsMenu.gameObject.SetActive (clicked);
 			mainMenu.gameObject.SetActive (false);

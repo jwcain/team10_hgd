@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Trap : MonoBehaviour {
 
-	public string name;
+	public string name; // [TODO] this might need to be changed, it is currently hiding the defualt unity name keyword for gameobjects
 	public string description; // Maybe delete
 	public int cost;
 	public bool canPlaceOnWalls;

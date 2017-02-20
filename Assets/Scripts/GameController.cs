@@ -4,7 +4,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 
 	private float countdownTimer;
 
@@ -15,7 +16,7 @@ public class GameController : MonoBehaviour {
 
 	public int maxRounds;
 
-	private int[] scores = {0, 0};
+	private int[] scores = { 0, 0 };
 	private int currPlayer;
 	private int currCreator;
 	//Increase this for a longer Creator phase
@@ -49,14 +50,16 @@ public class GameController : MonoBehaviour {
 	private GameObject mapContainer;
 	private MapInfo mapinfo;
 
-	private DynamicCamera camera;
+	new private DynamicCamera camera;
+	//New keywords is used to hide the default Unity camera keyword for this one.
 
-	void Start () {
+	void Start()
+	{
 		state = 0;
 		round = 1;
 		timer = 90f;
-		scores [0] = 0;
-		scores [1] = 0;
+		scores[0] = 0;
+		scores[1] = 0;
 		currPlayer = 0;
 		currCreator = 1;
 		ranTwice = false;
@@ -65,42 +68,46 @@ public class GameController : MonoBehaviour {
 		if (maxRounds <= 0)
 			maxRounds = 5;
 
-		spawnedContainer = transform.FindChild ("spawnedContainer").gameObject;
+		spawnedContainer = transform.FindChild("spawnedContainer").gameObject;
 		camera = GameObject.Find("Main Camera").GetComponent<DynamicCamera>();
-		scoreboardCanvas = Instantiate (scoreboardCanvas);
-		scoreboard = scoreboardCanvas.transform.FindChild ("Scoreboard").GetComponent<Scoreboard> ();
-		scoreboardCanvas.SetActive (false);
+		scoreboardCanvas = Instantiate(scoreboardCanvas);
+		scoreboard = scoreboardCanvas.transform.FindChild("Scoreboard").GetComponent<Scoreboard>();
+		scoreboardCanvas.SetActive(false);
 	}
 
-	void Update () {
+	void Update() {
 
-		if (Input.GetButtonDown ("Back_1"))
-			SceneManager.LoadScene ("FinalGame");
+		if (Input.GetButtonDown("Back_1"))
+			SceneManager.LoadScene("FinalGame");
 
-		switch (state) {
+		switch (state)
+		{
 		case 0: //Creator
 			{
-				if (!mapContainer) {
-					generateMap ();
+				if (!mapContainer)
+				{
+					generateMap();
 				}
 				
 				string timeText;
 				timeText = (int)((timer + 1) / 60) + ":" + (int)(((timer + 1) % 60) / 10) + (int)(((timer + 1) % 60) % 10);
-				if (!creator) {
-					createCreator ();
+				if (!creator)
+				{
+					createCreator();
 					// Position creator at start
 					Vector3 tempPos = mapinfo.startLocation.transform.position;
 					tempPos.z = creator.transform.position.z;
 					creator.transform.position = tempPos;
 					creator.money = mapinfo.mapMoney;
-					creator.ui.updateMoneyText (creator.money);
+					creator.ui.updateMoneyText(creator.money);
 				}
-				creator.ui.updateTimers (timeText);
+				creator.ui.updateTimers(timeText);
 
-				if (timer <= 0 || creator.money <= 0) {
+				if (timer <= 0 || creator.money <= 0)
+				{
 					creatorContainer.gameObject.SetActive(false);
-					scoreboardCanvas.SetActive (true);
-					scoreboard.updateScoreboardAll (
+					scoreboardCanvas.SetActive(true);
+					scoreboard.updateScoreboardAll(
 						phaseSwitchMessages[0], 
 						scores[0], 
 						scores[1], 
@@ -110,20 +117,22 @@ public class GameController : MonoBehaviour {
 						"Starting Player Phase");
 					phaseSwitchState = 0;
 					timer = phaseSwitchTimes[0];
-					nextState ();
+					nextState();
 				}
 				break;
 			}
 		case 1: //Phase Switch
 			{
-				if (timer <= 0) {
+				if (timer <= 0)
+				{
 					phaseSwitchState++;
-					if (phaseSwitchState >= phaseSwitchMessages.Length) {
-						scoreboardCanvas.SetActive (false);
+					if (phaseSwitchState >= phaseSwitchMessages.Length)
+					{
+						scoreboardCanvas.SetActive(false);
 						if (!playerContainer)
-							createPlayer ();
-						playerContainer.gameObject.SetActive (true);
-						camera.setFollowing (player.gameObject);
+							createPlayer();
+						playerContainer.gameObject.SetActive(true);
+						camera.setFollowing(player.gameObject);
 
 						timer = mapinfo.timeToFinish;
 
@@ -132,16 +141,19 @@ public class GameController : MonoBehaviour {
 						tempPos.z = player.transform.position.z;
 						player.transform.position = tempPos;
 
-						SentryController[] sentries = spawnedContainer.GetComponentsInChildren<SentryController> ();
-						foreach (SentryController sentry in sentries) {
+						SentryController[] sentries = spawnedContainer.GetComponentsInChildren<SentryController>();
+						foreach (SentryController sentry in sentries)
+						{
 							sentry.enabled = true;
-							sentry.setPlayer ();
+							sentry.setPlayer();
 						}
 
-						nextState ();
-					} else {
-						scoreboard.updateScoreboardMessage (phaseSwitchMessages[phaseSwitchState]);
-						timer = phaseSwitchTimes [phaseSwitchState];
+						nextState();
+					}
+					else
+					{
+						scoreboard.updateScoreboardMessage(phaseSwitchMessages[phaseSwitchState]);
+						timer = phaseSwitchTimes[phaseSwitchState];
 					}
 				}
 				break;
@@ -150,54 +162,65 @@ public class GameController : MonoBehaviour {
 			{
 				string timeText;
 				timeText = (int)((timer + 1) / 60) + ":" + (int)(((timer + 1) % 60) / 10) + (int)(((timer + 1) % 60) % 10);
-				player.ui.updateTimers (timeText);
-				if (timer <= 0 || playerReachedEnd) {
-					playerContainer.gameObject.SetActive (false);
+				player.ui.updateTimers(timeText);
+				if (timer <= 0 || playerReachedEnd)
+				{
+					playerContainer.gameObject.SetActive(false);
 
 					int cPlayerScore;
 					int cCreatorScore;
-					if (playerReachedEnd) {
+					if (playerReachedEnd)
+					{
 						cPlayerScore = (int)((timer / mapinfo.timeToFinish) * 1000);
 						cCreatorScore = 1000 - cPlayerScore;
-					} else {
+					}
+					else
+					{
 						cPlayerScore = 100;
 						cCreatorScore = 400;
 					}
-					scores [currPlayer] += cPlayerScore;
-					scores [currCreator] += cCreatorScore;
+					scores[currPlayer] += cPlayerScore;
+					scores[currCreator] += cCreatorScore;
 
 					// Swap the roles
-					if (currPlayer == 0 && currCreator == 1) {
+					if (currPlayer == 0 && currCreator == 1)
+					{
 						currPlayer = 1;
 						currCreator = 0;
-					} else {
+					}
+					else
+					{
 						currPlayer = 0;
 						currCreator = 1;
 					}
-					player.setController (currPlayer + 1);
-					creator.setController (currCreator + 1);
+					player.setController(currPlayer + 1);
+					creator.setController(currCreator + 1);
 
 					// The string to Print above the scoreboard
 					string information;
 
-					if (ranTwice) {
+					if (ranTwice)
+					{
 						round++;
 						ranTwice = false;
 						information = "Starting Next Round";
-						Destroy (mapContainer);
-					} else {
+						Destroy(mapContainer);
+					}
+					else
+					{
 						information = "Swapping Roles";
 						ranTwice = true;
 					}
 
-					if (round > maxRounds) {
+					if (round > maxRounds)
+					{
 						information = "The Loser Is...";
 						state = 4;
-						scoreboardCanvas.SetActive (true);
-						scoreboard.updateScoreboardAll (
-							phaseSwitchMessages [0], 
-							scores [0], 
-							scores [1], 
+						scoreboardCanvas.SetActive(true);
+						scoreboard.updateScoreboardAll(
+							phaseSwitchMessages[0], 
+							scores[0], 
+							scores[1], 
 							currPlayer, 
 							currCreator, 
 							round.ToString(),
@@ -205,11 +228,11 @@ public class GameController : MonoBehaviour {
 						break;
 					}
 
-					scoreboardCanvas.SetActive (true);
-					scoreboard.updateScoreboardAll (
-						phaseSwitchMessages [0], 
-						scores [0], 
-						scores [1], 
+					scoreboardCanvas.SetActive(true);
+					scoreboard.updateScoreboardAll(
+						phaseSwitchMessages[0], 
+						scores[0], 
+						scores[1], 
 						currPlayer, 
 						currCreator, 
 						round + "\\" + maxRounds,
@@ -220,67 +243,75 @@ public class GameController : MonoBehaviour {
 
 					// Reset the player to starting
 					player.resetEverything();
-					nextState ();
+					nextState();
 					playerReachedEnd = false;
-				} else if (player.currentHealth <= 0) {
-					player.resetHealthOfPlayer ();
+				}
+				else if (player.currentHealth <= 0)
+				{
+					player.resetHealthOfPlayer();
 
 					// Position player at start
 					Vector3 tempPos = mapinfo.startLocation.transform.position;
 					tempPos.z = player.transform.position.z;
 					player.transform.position = tempPos;
-					scores [currPlayer] -= 100;
-					scores [currCreator] += 100;
+					scores[currPlayer] -= 100;
+					scores[currCreator] += 100;
 				}
 				break;
 			}
 		case 3:
 			{
-				clearSpawnedObjects ();
+				clearSpawnedObjects();
 				string timeText;
 				timeText = (int)((timer + 1) / 60) + ":" + (int)(((timer + 1) % 60) / 10) + (int)(((timer + 1) % 60) % 10);
-				scoreboard.updateScoreboardMessage (timeText);
+				scoreboard.updateScoreboardMessage(timeText);
 
 				creator.money = mapinfo.mapMoney;
-				creator.ui.updateMoneyText (mapinfo.mapMoney);
+				creator.ui.updateMoneyText(mapinfo.mapMoney);
 
-				if (timer <= 0) {
+				if (timer <= 0)
+				{
 					timer = 90f;
-					scoreboardCanvas.gameObject.SetActive (false);
-					creatorContainer.gameObject.SetActive (true);
+					scoreboardCanvas.gameObject.SetActive(false);
+					creatorContainer.gameObject.SetActive(true);
 
 					if (!mapContainer)
-						generateMap ();
+						generateMap();
 
-					enablePowerUps ();
+					enablePowerUps();
 
 					// Position creator at start
 					Vector3 tempPos = mapinfo.startLocation.transform.position;
 					tempPos.z = creator.transform.position.z;
 					creator.transform.position = tempPos;
 
-					camera.setFollowing (creator.gameObject);
-					nextState ();
+					camera.setFollowing(creator.gameObject);
+					nextState();
 				}
 				break;
 			}
 		case 4: // END GAME
 			{
-				if (scores [0] < scores [1])
-					scoreboard.setLoser (0);
-				else if (scores [1] < scores [0])
-					scoreboard.setLoser (1);
+				if (scores[0] < scores[1])
+					scoreboard.setLoser(0);
+				else if (scores[1] < scores[0])
+					scoreboard.setLoser(1);
 				else
-					scoreboard.setLoser (3);
+					scoreboard.setLoser(3);
 				
-				if (Input.GetButtonDown ("A_1") || Input.GetButtonDown ("A_2")) {
-					SceneManager.LoadScene ("MainMenu");	
+				if (Input.GetButtonDown("A_1") || Input.GetButtonDown("A_2"))
+				{
+					SceneManager.LoadScene("MainMenu");	
 				}
 				break;
 			}
 		}
+
+
+
 		timer -= Time.deltaTime;
-	}
+	} 
+	//End of update Method
 
 	private void nextState()
 	{
@@ -290,52 +321,63 @@ public class GameController : MonoBehaviour {
 			state = state + 1;
 	}
 
-	private void createPlayer() {
-		playerContainer = Instantiate (playerPrefab).transform;
+	private void createPlayer()
+	{
+		playerContainer = Instantiate(playerPrefab).transform;
 		player = playerContainer.Find("PlayerEnt").GetComponent<PlayerController>();
 		playerUI = playerContainer.Find("PlayerUI").GetComponent<PlayerHud>();
-		camera.setFollowing (player.gameObject);
+		camera.setFollowing(player.gameObject);
 
-		if (Input.GetJoystickNames ().Length > 1) {
-			player.setController (1);
-		} else {
-			player.setController (1);
+		if (Input.GetJoystickNames().Length > 1)
+		{
+			player.setController(1);
+		}
+		else
+		{
+			player.setController(1);
 		}
 	}
 
-	private void createCreator() {
-		creatorContainer = Instantiate (creatorPrefab).transform;
+	private void createCreator()
+	{
+		creatorContainer = Instantiate(creatorPrefab).transform;
 		creator = creatorContainer.Find("CreatorEnt").GetComponent<CreatorController>();
 		creatorUI = creatorContainer.Find("CreatorUI").GetComponent<CreatorHud>();
-		camera.setFollowing (creator.gameObject);
+		camera.setFollowing(creator.gameObject);
 
-		if (Input.GetJoystickNames ().Length > 1) {
-			creator.setController (2);
-		} else {
-			creator.setController (1);
+		if (Input.GetJoystickNames().Length > 1)
+		{
+			creator.setController(2);
+		}
+		else
+		{
+			creator.setController(1);
 		}
 	}
 
-	private void clearSpawnedObjects() {
+	private void clearSpawnedObjects()
+	{
 		foreach (Transform spawned in spawnedContainer.transform)
-			Destroy (spawned.gameObject);
+			Destroy(spawned.gameObject);
 	}
 
-	private void enablePowerUps() {
+	private void enablePowerUps()
+	{
 		foreach (Transform powerUp in mapContainer.transform.Find("PowerUps"))
-			powerUp.gameObject.SetActive (true);
+			powerUp.gameObject.SetActive(true);
 	}
 
 	public void applyGameObject(GameObject child)
 	{
-		child.transform.SetParent (spawnedContainer.transform);
+		child.transform.SetParent(spawnedContainer.transform);
 	}
 
-	public void generateMap(){
-		string rnd = Random.Range (1, 4).ToString();
+	public void generateMap()
+	{
+		string rnd = Random.Range(1, 4).ToString();
 		string mapPath = "Map" + rnd;
-		mapContainer = Instantiate (Resources.Load(mapPath, typeof(GameObject))) as GameObject;
-		mapinfo = mapContainer.GetComponent<MapInfo> ();
+		mapContainer = Instantiate(Resources.Load(mapPath, typeof(GameObject))) as GameObject;
+		mapinfo = mapContainer.GetComponent<MapInfo>();
 	}
 
 	public void endPlayerPhase()
