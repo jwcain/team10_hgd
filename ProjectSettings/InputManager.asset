@@ -774,7 +774,7 @@ InputManager:
     axis: 1
     joyNum: 4
   - serializedVersion: 3
-    m_Name: R_YAxis_1
+    m_Name: R_YAxis_0
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -838,7 +838,7 @@ InputManager:
     axis: 4
     joyNum: 4
   - serializedVersion: 3
-    m_Name: R_XAxis_1
+    m_Name: R_XAxis_0
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
