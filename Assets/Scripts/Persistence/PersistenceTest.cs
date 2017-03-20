@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PersistanceTest : MonoBehaviour {
+public class PersistenceTest : MonoBehaviour {
 
 	//Different types to test
 	public float a = 0.0f;
@@ -25,12 +25,12 @@ public class PersistanceTest : MonoBehaviour {
 			obj.c = c;
 			obj.d = d;
 
-			BinaryPersistance.Save<simpleNumSave>(obj, "bintest");
+			BinaryPersistence.Save<simpleNumSave>(obj, "bintest");
 			save = false;
 		}
 
 		if (load == true) {
-			simpleNumSave obj = BinaryPersistance.Load<simpleNumSave>("bintest");
+			simpleNumSave obj = BinaryPersistence.Load<simpleNumSave>("bintest");
 			a = obj.a;
 			b = obj.b;
 			c = obj.c;

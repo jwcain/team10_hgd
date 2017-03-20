@@ -46,27 +46,27 @@ public class CreatorController : MonoBehaviour {
 		if (!ui) {
 			ui = GameObject.Find ("CreatorUI").GetComponent<CreatorHud>();
 			ui.updateMoneyText(money);
-			setObjRenderer ();
+			setObjRenderer();
 		}
-		float inputXAmount = Input.GetAxis ("L_XAxis_" + contToUse);
-		float inputYAmount = Input.GetAxis ("L_YAxis_" + contToUse);
+		float inputXAmount = Input.GetAxis("L_XAxis_" + contToUse);
+		float inputYAmount = Input.GetAxis("L_YAxis_" + contToUse);
 
 		if (Input.GetButtonDown ("A_" + contToUse))
-			spawnGameObject ();
+			spawnGameObject();
 
 		if (Input.GetButtonDown ("RB_" + contToUse)) {
 			if (currObj < availableObjs.Length - 1)
 				currObj++;
 			else
 				currObj = 0;
-			setObjRenderer ();
+			setObjRenderer();
 		}
 		if (Input.GetButtonDown ("LB_" + contToUse)) {
 			if (currObj > 0)
 				currObj--;
 			else
 				currObj = availableObjs.Length - 1;
-			setObjRenderer ();
+			setObjRenderer();
 		}
 		
 		// Calculate how much the velocity should change based on xAccel

@@ -92,11 +92,11 @@ public class PlayerController: MonoBehaviour {
 			if (currentWeapon.ammo == 0)
 				pickUpWeapon (Instantiate(defaultWeapon));
 		}
-
+		/*
 		if (Input.GetKey("a"))
 			transform.Translate(-Vector3.right * maxSpeed * Time.deltaTime);
 		if (Input.GetKey("d"))
-			transform.Translate(-Vector3.left * maxSpeed * Time.deltaTime);
+			transform.Translate(-Vector3.left * maxSpeed * Time.deltaTime);*/
 	}
 
 	void FixedUpdate () {

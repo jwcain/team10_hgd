@@ -3,7 +3,7 @@ using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class BinaryPersistance : MonoBehaviour {
+public class BinaryPersistence : MonoBehaviour {
 
 	/* In order to use this properly, you need an intermediary class to hold your data
 	 * This class has to have the [System.Serializable] tag and try to make it as little
