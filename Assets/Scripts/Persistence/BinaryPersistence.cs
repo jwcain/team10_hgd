@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
@@ -40,6 +41,7 @@ public class BinaryPersistence : MonoBehaviour {
 
 
 	public static void Save<T>(T obj, string saveName) {
+		Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes"); // This line fixes an odd bug with the binary formatter
 		//So for binary formating the object we are saving has to be serializable,
 		// Ususally this means it has to be tagged byt the [System.Serializable] tag abover the 
 		// class. 
@@ -68,14 +70,15 @@ public class BinaryPersistence : MonoBehaviour {
 			file.Flush();
 			file.Close();
 		}
-		catch {
+		catch (Exception ex) {
 			Debug.LogError("Unable to save " + saveName + ".");
+			Debug.LogError(ex.Message);
 			return;
 		}
 	}
 
 	public static T Load<T>(string saveName) {
-		
+		Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes"); // This line fixes an odd bug with the binary formatter
 		//Open a binary formatter
 		BinaryFormatter bf = new BinaryFormatter();
 
@@ -83,18 +86,24 @@ public class BinaryPersistence : MonoBehaviour {
 		string path = Application.persistentDataPath;
 		path += "/" + saveName + ".dat";
 
+		//Do a try catch for actually opening the file, to protect ourselves.
 		try {
+			//Open the file and deserialize the data, Note, This makes no garuntees on the quality/validity of the data loaded, recommended to perform checks.
 			FileStream file = File.Open(path,FileMode.Open);
 			T toReturn = (T)bf.Deserialize(file);
-			//[TODO] Potentially validate that we loaded non garbage data?
+
+			//Close the file reader
 			file.Flush();
 			file.Close();
+
+
 			return toReturn;
 		} 
-		catch {
-			Debug.LogError("Unable to load " + saveName + " may not exist.");
+		catch (Exception ex){
+			Debug.LogError("Unable to load " + saveName + ".");
+			Debug.LogError(ex.Message);
 			//Debug.LogError();
-			return default(T);
+			return default(T); // Due to generics, default(T) has to be returned instead of null, for most cases default(T) should actually be null but we cannot assume that here.
 		}
 	}
 }
