@@ -530,11 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a5884f1cd2bce45bc6a6443df9225c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableObjs:
-  - {fileID: 114000011247979044, guid: fa988fcd00d9481458acb3268c6a2b10, type: 2}
-  - {fileID: 114000013294349448, guid: 0bb178ab855a6764db55b4fd810fb673, type: 2}
-  - {fileID: 114000013104352942, guid: 1a0c5be71b07bcb418c6cc730fe8b263, type: 2}
-  - {fileID: 114000012641587990, guid: c0853e518f899154689b02cc3aa08a25, type: 2}
+  availableObjs: []
   moveSpeed: 20
   money: 0
   ui: {fileID: 114000011569616786}

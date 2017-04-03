@@ -10,9 +10,11 @@ public class MapInfo : MonoBehaviour {
 
 	void Awake()
 	{
-		if (!startLocation)
+		if (!startLocation && transform.FindChild ("StartLocation"))
 			startLocation = transform.FindChild ("StartLocation");
-		if (!endFlag)
+		if (!endFlag && transform.FindChild ("EndFlag"))
 			endFlag = transform.FindChild ("EndFlag").gameObject;
 	}
+
+
 }

@@ -13,16 +13,8 @@ public class Projectile : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D col) 
 	{
-		if (col.gameObject.tag == "Player") {
-			col.gameObject.GetComponent<PlayerController> ().applyDamage (10);
-			Destroy (gameObject);
-		} else if (LayerMask.LayerToName (col.transform.gameObject.layer) == "Platforms") {
-			Destroy (gameObject);
-		} else if (col.gameObject.tag == "Enemies") {
-			col.gameObject.GetComponent<SentryController> ().applyDamage (10);
-			Destroy (gameObject);
-		}
-			
+		col.gameObject.SendMessage ("applyDamage", 10, UnityEngine.SendMessageOptions.DontRequireReceiver);
+		Destroy (gameObject);	
 	}
 	
 	// Update is called once per frame

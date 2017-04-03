@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class CreatorController : MonoBehaviour {
 
-	public Trap[] availableObjs;
+	public List<Trap> availableObjs;
 	public float moveSpeed;
 	public int money;
 	// Used to get reference to see who is the current player
@@ -29,11 +29,21 @@ public class CreatorController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		if (GameObject.Find ("Game")) {
 			game = GameObject.Find ("Game").GetComponent<GameController> ();
 		} else {
 			gameDebug = GameObject.Find ("GameDebug").GetComponent<GameDebugController> ();
 		}
+
+		//Load the available traps from the traps resouce folder
+		availableObjs = new List<Trap> ();
+		Object[] objs = Resources.LoadAll("Traps/");
+		foreach(Object obj in objs) {
+			if(((GameObject)obj).GetComponent<Trap>() != null)
+				availableObjs.Add(((GameObject)obj).GetComponent<Trap>());
+		}
+
 		// print (game.player);
 		currObj = 0;
 		contToUse = 1;
@@ -46,27 +56,27 @@ public class CreatorController : MonoBehaviour {
 		if (!ui) {
 			ui = GameObject.Find ("CreatorUI").GetComponent<CreatorHud>();
 			ui.updateMoneyText(money);
-			setObjRenderer();
+			setObjRenderer ();
 		}
-		float inputXAmount = Input.GetAxis("L_XAxis_" + contToUse);
-		float inputYAmount = Input.GetAxis("L_YAxis_" + contToUse);
+		float inputXAmount = Input.GetAxis ("L_XAxis_" + contToUse);
+		float inputYAmount = Input.GetAxis ("L_YAxis_" + contToUse);
 
 		if (Input.GetButtonDown ("A_" + contToUse))
-			spawnGameObject();
+			spawnGameObject ();
 
 		if (Input.GetButtonDown ("RB_" + contToUse)) {
-			if (currObj < availableObjs.Length - 1)
+			if (currObj < availableObjs.Count - 1)
 				currObj++;
 			else
 				currObj = 0;
-			setObjRenderer();
+			setObjRenderer ();
 		}
 		if (Input.GetButtonDown ("LB_" + contToUse)) {
 			if (currObj > 0)
 				currObj--;
 			else
-				currObj = availableObjs.Length - 1;
-			setObjRenderer();
+				currObj = availableObjs.Count - 1;
+			setObjRenderer ();
 		}
 		
 		// Calculate how much the velocity should change based on xAccel
@@ -96,7 +106,7 @@ public class CreatorController : MonoBehaviour {
 		//Check if you can place this object right now
 		canPlace = (thisObj.canPlaceInAir || snappedEdge != null);
 		//Check if this object is being placed on another
-		if(currObjRenderer.GetComponent<Collider2D>().IsTouchingLayers(LayerMask.GetMask("Creator", "Enemies"))) {
+		if (currObjRenderer.GetComponent<Collider2D> ().IsTouchingLayers (LayerMask.GetMask ("Creator", "Enemies"))) {
 			canPlace = false;
 		}
 		//Check if a laser hits something

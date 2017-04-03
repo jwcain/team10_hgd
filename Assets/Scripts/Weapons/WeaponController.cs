@@ -5,6 +5,7 @@ public class WeaponController : MonoBehaviour {
 
 	public float variance;
 	public int ammo;
+	public int damageDone = 30;
 	public float fireRate = 0.5F;
 	public LayerMask canBeShot;
 
@@ -57,13 +58,8 @@ public class WeaponController : MonoBehaviour {
 		if (hit) {
 			generateTrail (hit.distance);
 			print ("Hit: " + hit.transform.name);
-			if (LayerMask.LayerToName (hit.transform.gameObject.layer) == "Platforms") {
-				
-			} else if (hit.transform.gameObject.tag == "Enemies") {
-				hit.transform.GetComponent<SentryController> ().applyDamage (30);
-			} else if (hit.transform.gameObject.tag == "Player") {
-				hit.transform.GetComponent<PlayerController> ().applyDamage (10);
-			}
+
+			hit.transform.gameObject.SendMessage ("applyDamage", this.damageDone, UnityEngine.SendMessageOptions.DontRequireReceiver);
 		} else {
 			generateTrail ();
 		}

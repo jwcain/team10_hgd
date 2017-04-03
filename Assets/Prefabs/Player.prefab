@@ -904,6 +904,7 @@ MonoBehaviour:
   currentHealth: 0
   onLadder: 0
   powerUp: 
+  defaultColor: {r: 1, g: 1, b: 1, a: 0}
   currentWeapon: {fileID: 0}
   defaultWeapon: {fileID: 114000013048013508, guid: 1838a38f20b2f074fa1304dd8c7caa41,
     type: 2}

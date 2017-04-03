@@ -9,6 +9,7 @@ public class SentryController : WeaponController {
 	public int health = 100;
 	private Quaternion lookRotation;
 	private Vector3 direction;
+	private int playerSet;
 
 	void Start() {
 		if (rotateSpeed < 1f)
@@ -19,6 +20,8 @@ public class SentryController : WeaponController {
 	}
 
 	void Update(){
+		if (playerSet == 0)
+			setPlayer ();
 		direction = (target.position - transform.position).normalized;
 		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 		lookRotation = Quaternion.AngleAxis (angle, Vector3.forward);
@@ -42,6 +45,7 @@ public class SentryController : WeaponController {
 
 	public void setPlayer()
 	{
-		target = GameObject.Find("PlayerEnt").transform;
+		if(target = GameObject.Find("PlayerEnt").transform)
+		playerSet = 1;
 	}
 }

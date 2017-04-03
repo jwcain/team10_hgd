@@ -41,6 +41,11 @@ public class GameDebugController : MonoBehaviour
 		if (Input.GetButtonDown("Back_1"))
 			SceneManager.LoadScene("FinalGame");
 
+		if (!mapinfo) {
+			mapinfo = GameObject.FindObjectOfType<MapInfo> ();
+			mapContainer = mapinfo.gameObject;
+		}
+
 		if (!mapContainer && shouldGenerateMap)
 		{
 			generateMap(mapToGenerate);
@@ -149,6 +154,18 @@ public class GameDebugController : MonoBehaviour
 			powerUp.gameObject.SetActive(true);
 	}
 
+	public void respawnPlayer()
+	{
+		player.resetHealthOfPlayer();
+
+		// Position player at start
+		if (mapinfo) {
+			Vector3 tempPos = mapinfo.startLocation.transform.position;
+			tempPos.z = player.transform.position.z;
+			player.transform.position = tempPos;
+		}
+	}
+
 	public void applyGameObject(GameObject child)
 	{
 		child.transform.SetParent(spawnedContainer.transform);
@@ -156,7 +173,7 @@ public class GameDebugController : MonoBehaviour
 
 	public void generateMap(int mapNo)
 	{
-		string mapPath = "Map" + mapNo;
+		string mapPath = "Maps/Map" + mapNo;
 		mapContainer = Instantiate(Resources.Load(mapPath, typeof(GameObject))) as GameObject;
 		mapinfo = mapContainer.GetComponent<MapInfo>();
 	}

@@ -7,4 +7,4 @@ Please look at the Wiki for more information: https://github.com/ronaldliu/team1
 
 Helpful link to viewing tasks: https://docs.google.com/a/mtu.edu/document/d/1DmAXAfw8Nk63EE5v9TiVeZPFAVkVcZqGPAvZAaGuNXM/edit?usp=sharing
 
-Add a line
+Learn how to use our neato built-in map editor: https://github.com/ronaldliu/team10_hgd/wiki/Using-the-Map-Editor
