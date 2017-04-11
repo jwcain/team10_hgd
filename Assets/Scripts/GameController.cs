@@ -58,6 +58,12 @@ public class GameController : MonoBehaviour
 	private MapInfo mapinfo;
 
 	new private DynamicCamera camera;
+
+	public AudioSource createSource;
+	public AudioSource runnerSource;
+	public AudioSource menuSource;
+	private bool startMusic;
+
 	//New keywords is used to hide the default Unity camera keyword for this one.
 
 	void Start()
@@ -82,9 +88,19 @@ public class GameController : MonoBehaviour
 		scoreboard = scoreboardCanvas.transform.FindChild("Scoreboard").GetComponent<Scoreboard>();
 		scoreboardCanvas.SetActive(false);
 
+		//set up music objects
+		createSource = GameObject.Find ("CreatorMusic").GetComponent<AudioSource>();
+		runnerSource = GameObject.Find ("PlayerMusic").GetComponent<AudioSource>();
+		menuSource = GameObject.Find ("MenuMusic").GetComponent<AudioSource>();
+		startMusic = true;
+		//createSource.Play();
+		AudioSource temp = GameObject.Find ("BackgroundMusic").GetComponent<AudioSource>();
+		temp.Stop ();
+
 		PlayerColorHolder ColorManager = GameObject.Find ("ColorHolder").GetComponent<PlayerColorHolder> ();
 		player1Color = ColorManager.player1Color;
 		player2Color = ColorManager.player2Color;
+
 	}
 
 	void Update() {
@@ -96,6 +112,13 @@ public class GameController : MonoBehaviour
 		{
 		case 0: //Creator
 			{
+				//start music
+				if (startMusic) {
+					menuSource.Stop();
+					createSource.Play();
+					startMusic = false;
+				}
+
 				if (!mapContainer)
 				{
 					generateMap();
@@ -138,11 +161,20 @@ public class GameController : MonoBehaviour
 					phaseSwitchState = 0;
 					timer = phaseSwitchTimes[0];
 					nextState();
+					//set bool for beginning of next round
+					startMusic = true;
 				}
 				break;
 			}
 		case 1: //Phase Switch
 			{
+				//music handling
+				if (startMusic) {
+					createSource.Stop();
+					menuSource.Play();
+					startMusic = false;
+				}
+
 				if (timer <= 0)
 				{
 					phaseSwitchState++;
@@ -169,6 +201,8 @@ public class GameController : MonoBehaviour
 						}
 
 						nextState();
+						//set bool for beginning of next round
+						startMusic = true;
 					}
 					else
 					{
@@ -180,6 +214,13 @@ public class GameController : MonoBehaviour
 			}
 		case 2: //Player
 			{
+				//start music
+				if (startMusic) {
+					menuSource.Stop();
+					runnerSource.Play();
+					startMusic = false;
+				}
+
 				if (!roundStarted) {
 					//change color of player
 					foreach (SpriteRenderer ob in playerSprites) {
@@ -281,6 +322,8 @@ public class GameController : MonoBehaviour
 					// Reset the player to starting
 					player.resetEverything();
 					nextState();
+					//set bool for beginning of next round
+					startMusic = true;
 					playerReachedEnd = false;
 					roundStarted = false;
 				}
@@ -288,6 +331,13 @@ public class GameController : MonoBehaviour
 			}
 		case 3:
 			{
+				//start music
+				if (startMusic) {
+					runnerSource.Stop();
+					menuSource.Play();
+					startMusic = false;
+				}
+
 				clearSpawnedObjects();
 				string timeText;
 				timeText = (int)((timer + 1) / 60) + ":" + (int)(((timer + 1) % 60) / 10) + (int)(((timer + 1) % 60) % 10);
@@ -320,6 +370,8 @@ public class GameController : MonoBehaviour
 
 					camera.setFollowing(creator.gameObject);
 					nextState();
+					//set bool for beginning of next round
+					startMusic = true;
 				}
 				break;
 			}
@@ -351,6 +403,7 @@ public class GameController : MonoBehaviour
 
 	private void nextState()
 	{
+		//set state of next round
 		if (state >= 3)
 			state = 0;
 		else

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LeaderboardGUI : MonoBehaviour {
 
@@ -19,8 +21,12 @@ public class LeaderboardGUI : MonoBehaviour {
 		lbStyle.font = f;
 		lbStyle.normal.textColor = Color.red;
 
+		Color myColor = new Color ();
+		ColorUtility.TryParseHtmlString ("#00B5FFFF", out myColor);
+		lbStyle.normal.textColor = myColor;
+
 		// Create GUI with leaderboard:
-		GUILayout.BeginArea (new Rect(0, 0, Screen.width, Screen.height));
+		GUILayout.BeginArea (new Rect(0, 0, Screen.width, Screen.height-100));
 		GUILayout.Label ("\n\nTry and Stop Me Leaderboard\n", titleStyle);
 		GUILayout.Label ("\t\t\t  Rank:\t\t  Name:\t\t  Score:\n", lbStyle);
 		for(int ctr = 0; ctr < Leaderboard.numHighScores; ++ctr) {
@@ -29,4 +35,5 @@ public class LeaderboardGUI : MonoBehaviour {
 		}
 		GUILayout.EndArea ();
 	}
+
 }

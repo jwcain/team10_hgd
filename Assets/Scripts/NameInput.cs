@@ -50,6 +50,8 @@ public class NameInput : MonoBehaviour {
 	private float lastTap = 0f;
 	private float wait = 0.3f;
 
+	private Color myColor;
+
 	void Start() {
 
 		// Debug Only!!!
@@ -58,8 +60,11 @@ public class NameInput : MonoBehaviour {
 		// Add winner's score to check if it's in top 10, go to main menu if not:
 		int x = Leaderboard.setHS(GameController.winScore, "YOU");
 		if (x == 0) {
-			SceneManager.LoadScene ("MainMenu");
+			SceneManager.LoadScene ("NewMainMenu");
 		}
+
+		//Color myColor = new Color ();
+		ColorUtility.TryParseHtmlString ("#00B5FFFF", out myColor);
 
 		letterText [0] = letter1;
 		letterText [1] = letter2;
@@ -121,11 +126,11 @@ public class NameInput : MonoBehaviour {
 			tapped = true;
 			if (pos == 0) {
 				pos = 2;
-				letterText [0].color = Color.red;
+				letterText [0].color = myColor;
 				letterText [2].color = Color.green;
 			} else {
 				pos--;
-				letterText [pos + 1].color = Color.red;
+				letterText [pos + 1].color = myColor;
 				letterText [pos].color = Color.green;
 			}
 		}
@@ -140,11 +145,11 @@ public class NameInput : MonoBehaviour {
 			tapped = true;
 			if (pos == 2) {
 				pos = 0;
-				letterText [2].color = Color.red;
+				letterText [2].color = myColor;
 				letterText [0].color = Color.green;
 			} else {
 				pos++;
-				letterText [pos - 1].color = Color.red;
+				letterText [pos - 1].color = myColor;
 				letterText [pos].color = Color.green;
 			}
 		}
@@ -154,22 +159,30 @@ public class NameInput : MonoBehaviour {
 		}
 			
 		if (Input.GetButtonDown("Start_1") || Input.GetKeyDown(KeyCode.KeypadEnter)) {
-
-			// Store player name:
-			hsName = letter1.text + letter2.text + letter3.text;
-
-			// Load high scores until new score found:
-			int ctr = 0;
-			var hs = Leaderboard.lbScores [ctr];
-			while (!hs.name.Equals ("YOU")) {
-				ctr++;
-				hs = Leaderboard.lbScores [ctr];
-			}
-
-			// Change name, save it, go to leaderboard:
-			hs.name = hsName;
-			PlayerPrefs.SetString ("lb[" + ctr + "].name", hs.name);
-			SceneManager.LoadScene ("Leaderboard");
+			EndGame ();
 		}
+	}
+
+	private void EndGame(){
+		float timer = Time.deltaTime;
+		int temp = 0;
+		// Store player name:
+		hsName = letter1.text + letter2.text + letter3.text;
+
+		// Load high scores until new score found:
+		int ctr = 0;
+		var hs = Leaderboard.getHS(ctr);
+		while (!hs.name.Equals ("YOU")) {
+			ctr++;
+			hs = Leaderboard.getHS(ctr);
+		}
+
+		// Change name, save it, go to leaderboard:
+		hs.name = hsName;
+		PlayerPrefs.SetString ("lb[" + ctr + "].name", hs.name);
+		while (temp < 1000) {
+			temp++;
+		}
+		SceneManager.LoadScene ("Leaderboard");
 	}
 }
