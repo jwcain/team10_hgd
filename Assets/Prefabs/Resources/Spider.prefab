@@ -405,6 +405,7 @@ MonoBehaviour:
   cost: 40
   canPlaceOnWalls: 0
   canPlaceInAir: 1
+  activateTheseScriptsOnRunnersTurn: []
 --- !u!114 &114000014092143044
 MonoBehaviour:
   m_ObjectHideFlags: 1

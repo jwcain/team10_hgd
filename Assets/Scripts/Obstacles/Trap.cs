@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Trap : MonoBehaviour {
 
@@ -8,5 +9,25 @@ public class Trap : MonoBehaviour {
 	public int cost;
 	public bool canPlaceOnWalls;
 	public bool canPlaceInAir;
+
+	public MonoBehaviour[] activateTheseScriptsOnRunnersTurn;
+
+	private static List<Trap> activeTraps;
+
+
+	public static void ActivateDelayedTraps() {
+		foreach (Trap t in activeTraps) {
+			foreach (MonoBehaviour s in t.activateTheseScriptsOnRunnersTurn) {
+				s.enabled = true;
+			}
+		}
+	}
+
+	void Start() {
+		if (activeTraps == null) {
+			activeTraps = new List<Trap>();
+		}
+		activeTraps.Add(this);
+	}
 
 }

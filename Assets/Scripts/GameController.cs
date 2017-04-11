@@ -194,6 +194,7 @@ public class GameController : MonoBehaviour
 							ob.color = new Color(player2Color.r, player2Color.g, player2Color.b);
 						}
 					}
+					Trap.ActivateDelayedTraps(); // Start up traps that need their scripts to be delayed till the start of the runner's round
 					roundStarted = true;
 				}
 				string timeText;
