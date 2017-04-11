@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad44c2515cd33c40870220355454111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxR: 10
+  maxR: 3
   force: 20
   dropOffRate: 1
   mask:

@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011469404252}
   - 114: {fileID: 114000010840921084}
   m_Layer: 0
-  m_Name: LameMap
+  m_Name: ~LameMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,6 +553,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToFinish: 10
   mapMoney: 2000
+  backColor: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 1}
+  particleColor1: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 0}
+  particleColor2: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 0}
   startLocation: {fileID: 4000013550980600}
   endFlag: {fileID: 1000014263561148}
 --- !u!114 &114000011811855144

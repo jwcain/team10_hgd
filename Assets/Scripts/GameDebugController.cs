@@ -8,8 +8,9 @@ public class GameDebugController : MonoBehaviour
 {
 	public enum Phase {Player, Creator};
 	public Phase phase;
+	public bool useMoneyFromMap = false;
 	public bool shouldGenerateMap = false;
-	public int mapToGenerate = 0;
+	public string mapToGenerate = "Map0";
 
 	public GameObject creatorPrefab;
 	public GameObject playerPrefab;
@@ -44,6 +45,11 @@ public class GameDebugController : MonoBehaviour
 		if (!mapinfo) {
 			mapinfo = GameObject.FindObjectOfType<MapInfo> ();
 			mapContainer = mapinfo.gameObject;
+
+			// Read the level colors
+			camera.GetComponent<Camera>().backgroundColor = mapinfo.backColor;
+			camera.transform.Find("Back").GetComponentInChildren<ParticleSystem> ().startColor = mapinfo.particleColor1;
+			camera.transform.Find("Back2").GetComponentInChildren<ParticleSystem> ().startColor = mapinfo.particleColor2;
 		}
 
 		if (!mapContainer && shouldGenerateMap)
@@ -68,7 +74,10 @@ public class GameDebugController : MonoBehaviour
 					Vector3 tempPos = mapinfo.startLocation.transform.position;
 					tempPos.z = creator.transform.position.z;
 					creator.transform.position = tempPos;
-					creator.money = mapinfo.mapMoney;
+					if(useMoneyFromMap)
+						creator.money = mapinfo.mapMoney;
+					else
+						creator.money = 999999999;
 				}
 				else
 				{
@@ -171,9 +180,9 @@ public class GameDebugController : MonoBehaviour
 		child.transform.SetParent(spawnedContainer.transform);
 	}
 
-	public void generateMap(int mapNo)
+	public void generateMap(string mapName)
 	{
-		string mapPath = "Maps/Map" + mapNo;
+		string mapPath = "Maps/" + mapName;
 		mapContainer = Instantiate(Resources.Load(mapPath, typeof(GameObject))) as GameObject;
 		mapinfo = mapContainer.GetComponent<MapInfo>();
 	}

@@ -424,10 +424,21 @@ public class GameController : MonoBehaviour
 
 	public void generateMap()
 	{
-		string rnd = Random.Range(1, 4).ToString();
-		string mapPath = "Maps/Map" + rnd;
-		mapContainer = Instantiate(Resources.Load(mapPath, typeof(GameObject))) as GameObject;
-		mapinfo = mapContainer.GetComponent<MapInfo>();
+		Object[] mapOs = Resources.LoadAll ("Maps/");
+		int rnd = Random.Range (0, mapOs.Length);
+		GameObject mapGo = (GameObject)mapOs [rnd];
+		if (mapGo.GetComponent<MapInfo> () && mapGo.name.ToCharArray () [0] != '~') {
+			mapContainer = Instantiate (mapGo);
+			mapinfo = mapContainer.GetComponent<MapInfo> ();
+
+			// Read the level colors
+			camera.GetComponent<Camera> ().backgroundColor = mapinfo.backColor;
+			camera.transform.Find ("Back").GetComponentInChildren<ParticleSystem> ().startColor = mapinfo.particleColor1;
+			camera.transform.Find ("Back2").GetComponentInChildren<ParticleSystem> ().startColor = mapinfo.particleColor2;
+		} else {
+			// Try again... ignore how poor practice this is
+			generateMap();
+		}
 	}
 
 	public void endPlayerPhase()

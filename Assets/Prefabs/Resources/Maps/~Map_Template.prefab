@@ -52,7 +52,7 @@ GameObject:
   - 4: {fileID: 4000011765051132}
   - 114: {fileID: 114000010425689454}
   m_Layer: 0
-  m_Name: Map_Template
+  m_Name: ~Map_Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,6 +258,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToFinish: 180
   mapMoney: 500
+  backColor: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 1}
+  particleColor1: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 0}
+  particleColor2: {r: 0.7490196, g: 0.7647059, b: 0.78431374, a: 0}
   startLocation: {fileID: 0}
   endFlag: {fileID: 0}
 --- !u!212 &212000010083543268
