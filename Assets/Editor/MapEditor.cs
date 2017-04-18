@@ -314,7 +314,7 @@ public class MapEditor : EditorWindow {
 		}
 
 		//Generate an empty map using the template
-		GameObject template = Resources.Load ("Maps/Map_Template") as GameObject;
+		GameObject template = Resources.Load ("Maps/~Map_Template") as GameObject;
 
 		mapObj = Instantiate (template);
 		mapObj.name = mapName;

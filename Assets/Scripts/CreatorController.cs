@@ -61,6 +61,8 @@ public class CreatorController : MonoBehaviour {
 		float inputXAmount = Input.GetAxis ("L_XAxis_" + contToUse);
 		float inputYAmount = Input.GetAxis ("L_YAxis_" + contToUse);
 
+		float rTriggerAmount = Input.GetAxis ("TriggersR_" + contToUse);
+
 		if (Input.GetButtonDown ("A_" + contToUse))
 			spawnGameObject ();
 
@@ -80,7 +82,7 @@ public class CreatorController : MonoBehaviour {
 		}
 		
 		// Calculate how much the velocity should change based on xAccel
-		Vector3 direction = new Vector3 (inputXAmount, -inputYAmount, 0.0f);
+		Vector3 direction = new Vector3 (inputXAmount, -inputYAmount, 0.0f) * (1f - (2*rTriggerAmount));
 		transform.Translate (moveSpeed * direction * Time.deltaTime);
 
 		GetComponent<CircleCollider2D> ().attachedRigidbody.WakeUp();

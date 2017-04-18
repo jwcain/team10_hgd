@@ -80,9 +80,9 @@ public class GC2 : MonoBehaviour
 		scoreboardCanvas = Instantiate(scoreboardCanvas);
 		scoreboard = scoreboardCanvas.transform.FindChild("Scoreboard").GetComponent<Scoreboard>();
 		scoreboardCanvas.SetActive(false);
-		PlayerColorHolder ColorManager = GameObject.Find ("ColorHolder").GetComponent<PlayerColorHolder> ();
-		player1Color = ColorManager.player1Color;
-		player2Color = ColorManager.player2Color;
+		MatchSettingsHolder SettingsManager = GameObject.Find ("ColorHolder").GetComponent<MatchSettingsHolder> ();
+		player1Color = SettingsManager.player1Color;
+		player2Color = SettingsManager.player2Color;
 
 		//SpriteRenderer SprRen = new SpriteRenderer ();
 		//SprRen.sprite = scoreboardSprites [0];
